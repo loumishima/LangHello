@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  langflow:
+    build:
+      context: ./
+      dockerfile: ./infra/Dockerfile.langflow
+    container_name: langflow
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./files:/app/files
+
+  streamlit:
+    build:
+      context: ./
+      dockerfile: ./infra/Dockerfile.streamlit
+    container_name: streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+     - ./streamlit-app:/app

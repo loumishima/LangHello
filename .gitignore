@@ -1,0 +1,5 @@
+.env
+venv_lang/
+files/
+*.json
+Tiltfile
