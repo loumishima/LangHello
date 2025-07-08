@@ -8,8 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install streamlit \
     pandas \
     matplotlib\
-    seaborn
+    seaborn \
+    dotenv
 
 WORKDIR /app
 
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "app.py", "--server.runOnSave", "false"]

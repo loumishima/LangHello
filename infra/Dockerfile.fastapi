@@ -1,0 +1,33 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Instala dependências do sistema (opcional, mas recomendado para evitar problemas com algumas libs)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && apt-get install -y libgl1-mesa-glx ffmpeg libsm6 libxext6 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copia os arquivos primeiro para instalar dependências (melhora cache)
+COPY ./ /app/
+
+# Instala as dependências Python
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    pandas \
+    prometheus_fastapi_instrumentator \
+    python-dotenv \
+    langchain \
+    langchain_openai \
+    langchain_community \
+    langchain_text_splitters \
+    langchain_core \
+    langchain_qdrant \
+    qdrant_client \
+    unstructured \
+    "unstructured[pdf]"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "api.api:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,22 +1,57 @@
 version: '3.9'
 
 services:
-  langflow:
-    build:
-      context: ./
-      dockerfile: ./infra/Dockerfile.langflow
-    container_name: langflow
-    ports:
-      - "7860:7860"
-    volumes:
-      - ./files:/app/files
+  # langflow:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./infra/Dockerfile.langflow
+  #   container_name: langflow
+  #   ports:
+  #     - "7860:7860"
+  #   volumes:
+  #     - ./files:/app/files
+  #   networks:
+  #     - local
 
   streamlit:
     build:
       context: ./
       dockerfile: ./infra/Dockerfile.streamlit
-    container_name: streamlit
+    container_name: streamlit_container
     ports:
       - "8501:8501"
+    environment:
+      - FASTAPI_URL=${FASTAPI_URL}
     volumes:
      - ./streamlit-app:/app
+    depends_on:
+      - fastapi
+      - qdrant
+    networks:
+      - local
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./infra/Dockerfile.fastapi
+    container_name: fastapi_container
+    ports:
+      - "8000:8000"
+    volumes:
+     - ./:/app
+    networks:
+      - local
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant_container
+    ports:
+      - "6333:6333"
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
+
+
