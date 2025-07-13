@@ -12,5 +12,6 @@ RUN pip install streamlit \
     dotenv
 
 WORKDIR /app
+COPY  ./streamlit-app /app/
 
 CMD ["streamlit", "run", "app.py", "--server.runOnSave", "false"]
